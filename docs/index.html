@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feliz Cumple Amelia 🎂</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      background: linear-gradient(to top, #8ec5fc, #e0c3fc);
+      font-family: 'Pacifico', cursive;
+      text-align: center;
+      overflow: hidden;
+      color: white;
+    }
+
+    .container {
+      margin-top: 10vh;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 0.2em;
+      text-shadow: 2px 2px #00000040;
+    }
+
+    p {
+      font-size: 1.2em;
+      max-width: 90%;
+      margin: 0 auto;
+    }
+    .buttons{
+        margin: auto;
+        
+        width: 70%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    button {
+      padding: 1em 2em;
+      margin-top: 30px;
+      font-size: 1.2em;
+      border: none;
+      background: #6a5acd;
+      color: white;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: transform 0.3s;
+      font-family: inherit;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    .balloons {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .balloon {
+      width: 50px;
+      height: 70px;
+      border-radius: 50% 50% 50% 50%;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .red { background: red; }
+    .blue { background: blue; }
+    .yellow { background: yellow; }
+    .green { background: green; }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-300px); }
+      100% { transform: translateY(0); }
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    #roblox-avatar {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      display: none;
+      border: 3px solid white;
+      box-shadow: 0 0 10px #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    #roblox-avatar:hover {
+      transform: scale(1.2);
+    }
+
+    #dedicatoria {
+      margin-top: 30px;
+      display: none;
+      background-color: rgba(255, 255, 255, 0.15);
+      padding: 20px;
+      border-radius: 15px;
+      backdrop-filter: blur(5px);
+      max-width: 700px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎉 ¡Feliz cumpleaños, Amelia! 🎂</h1>
+    <p>Te deseo un día tan increíble como tú 💖.
+        <br><span style="color: #6a5acd;">PD:</span> Sigue bailando con el corazón y muévete por lo que te hace feliz, nunca dejes que alguien te diga que no eres capaz de conseguir algo
+    </p>
+    <div id="dedicatoria">
+      <p style="font-size: 1em;">
+        Meli, ya sé que no tenemos mucho contacto últimamente pero quiero que sepas que me tienes para lo que necesites y que siempre voy a estar para apoyarte, aunque te pique con lo de las comidas jajaja (lo hago porque me preocupo por ti, no lo hago a malas) :D
+      </p>
+    </div>
+    <div class="buttons">
+        <button id="surprise-btn">Haz clic para tu sorpresa 🎁</button>
+    <button id="more-fireworks" style="display:none;">Clic para más 🎉🎉🎉</button>
+    </div>
+    
+    <canvas id="fireworks"></canvas>
+  </div>
+
+  <div class="balloons">
+    <div class="balloon red"></div>
+    <div class="balloon blue"></div>
+    <div class="balloon yellow"></div>
+    <div class="balloon green"></div>
+  </div>
+
+  <!-- Easter egg avatar -->
+  <img id="roblox-avatar" src="roblox.jpg" alt="Amelia Roblox Avatar">
+
+  <script>
+    const canvas = document.getElementById('fireworks');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let fireworks = [];
+
+    const surpriseBtn = document.getElementById('surprise-btn');
+    const moreFire = document.getElementById('more-fireworks');
+    const avatar = document.getElementById('roblox-avatar');
+    const dedicatoria = document.getElementById('dedicatoria');
+
+    surpriseBtn.addEventListener('click', () => {
+      createFireworks();
+      avatar.style.display = 'block';
+      dedicatoria.style.display = 'block';
+      surpriseBtn.style.display = 'none';
+      moreFire.style.display = 'block';
+    });
+    
+    moreFire.addEventListener('click', () => {
+      createFireworks();
+    }); 
+
+    function createFireworks() {
+      for (let i = 0; i < 30; i++) {
+        fireworks.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          radius: Math.random() * 3 + 2,
+          color: `hsl(${Math.random() * 360}, 100%, 50%)`,
+          angle: Math.random() * 2 * Math.PI,
+          speed: Math.random() * 5 + 2
+        });
+      }
+      animate();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fireworks.forEach((fw, i) => {
+        fw.x += Math.cos(fw.angle) * fw.speed;
+        fw.y += Math.sin(fw.angle) * fw.speed;
+        ctx.beginPath();
+        ctx.arc(fw.x, fw.y, fw.radius, 0, 2 * Math.PI);
+        ctx.fillStyle = fw.color;
+        ctx.fill();
+      });
+      requestAnimationFrame(animate);
+    }
+  </script>
+</body>
+</html>
